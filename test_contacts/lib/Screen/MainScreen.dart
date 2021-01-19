@@ -1,9 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dio/dio.dart';
-// import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:test_contacts/Screen/Details.dart';
 import 'package:test_contacts/Screen/New_Contact.dart';
 
 class MainScreen extends StatefulWidget {
@@ -12,37 +9,12 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  QuerySnapshot querySnapshot;
-  List<String> name = List<String>();
-
-  final databaseRef = FirebaseFirestore.instance;
-  RefreshController _refreshController = RefreshController(initialRefresh: false);
-  CollectionReference users = FirebaseFirestore.instance.collection('userInfo');
-
   @override
   void initState() {
     //getLawyerList();
-  
+    setState(() {});
 
     super.initState();
-  }
-
-  void _onRefresh() async {
-    await Future.delayed(Duration(milliseconds: 1000));
-    setState(() {
-       
-    });
-    _refreshController.refreshCompleted();
-  }
-
-  getUserInfo() {
-    FirebaseFirestore.instance.collection('userInfo').get().then((QuerySnapshot querySnapshot) => {
-          querySnapshot.docs.forEach((doc) {
-            print("get user: " + doc["name"]);
-            name.add(doc["name"]);
-            print(name);
-          })
-        });
   }
 
   @override
@@ -59,39 +31,38 @@ class _MainScreenState extends State<MainScreen> {
           title: Text("User Profile"),
           backgroundColor: Theme.of(context).accentColor,
         ),
-        body: SmartRefresher(
-          enablePullDown: true,
-          controller: _refreshController,
-          onRefresh: _onRefresh,
-          child: ListView.builder(
-              itemCount: name.length,
-              itemBuilder: (context, index) {
-                return Card(
-                  child: FutureBuilder(
-                    future: users.doc("${name[index].toString()}").get(),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasError) {
-                        return Text("Something went wrong");
-                      } else if (snapshot.connectionState == ConnectionState.done) {
-                        Map<String, dynamic> data = snapshot.data.data();
-                        return ListTile(
-                          onTap: () {},
-                          title: Text(
-                            "Name: ${data["name"]}",
-                            style: Theme.of(context).textTheme.headline6,
-                          ),
-                          subtitle: Text(
-                            "email: ${data["email"]}",
-                            style: Theme.of(context).textTheme.headline5,
-                          ),
-                        );
-                      }
-
-                      return Center(child: Text("loading..."));
-                    },
-                  ),
-                );
-              }),
-        ));
+        body: StreamBuilder<QuerySnapshot>(
+            stream: FirebaseFirestore.instance.collection('userInfo').snapshots(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                final List<DocumentSnapshot> documents = snapshot.data.docs;
+                return ListView(
+                    children: documents
+                        .map((doc) => Card(
+                              child: ListTile(
+                                onTap: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (_) => Details(
+                                            name: doc['name'],
+                                            surname: doc['surname'],
+                                            email: doc['email'],
+                                            phone: doc['phone'],
+                                          )));
+                                },
+                                title: Text(
+                                  doc['name'],
+                                  style: Theme.of(context).textTheme.headline2,
+                                ),
+                                subtitle: Text(
+                                  doc['email'],
+                                  style: Theme.of(context).textTheme.headline6,
+                                ),
+                              ),
+                            ))
+                        .toList());
+              } else if (snapshot.hasError) {
+                return Text('Its Error!');
+              }
+            }));
   }
 }

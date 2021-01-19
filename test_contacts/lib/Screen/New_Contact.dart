@@ -1,10 +1,5 @@
-import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:flutter/material.dart';
-import 'package:test_contacts/Screen/MainScreen.dart';
 
 class AddNewContact extends StatefulWidget {
   AddNewContact({Key key}) : super(key: key);
@@ -72,7 +67,6 @@ class _AddNewContactState extends State<AddNewContact> {
                             name.text);
                         name.text = "";
                         surname.text = "";
-                       
                       }
                     },
                   )
