@@ -12,26 +12,26 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-
   QuerySnapshot querySnapshot;
   List<String> name = List<String>();
 
   final databaseRef = FirebaseFirestore.instance;
   RefreshController _refreshController = RefreshController(initialRefresh: false);
   CollectionReference users = FirebaseFirestore.instance.collection('userInfo');
+
   @override
   void initState() {
     //getLawyerList();
-    getUserInfo();
-    setState(() {
-      getData();
-    });
+  
+
     super.initState();
   }
 
   void _onRefresh() async {
     await Future.delayed(Duration(milliseconds: 1000));
-    setState(() {});
+    setState(() {
+       
+    });
     _refreshController.refreshCompleted();
   }
 
@@ -42,38 +42,6 @@ class _MainScreenState extends State<MainScreen> {
             name.add(doc["name"]);
             print(name);
           })
-        });
-  }
-
-  Widget getData() {
-    return ListView.builder(
-        itemCount: name.length,
-        itemBuilder: (context, index) {
-          return Card(
-            child: FutureBuilder(
-              future: users.doc('${name[index].toString()}').get(),
-              builder: (context, snapshot) {
-                if (snapshot.hasError) {
-                  return Text("Something went wrong");
-                } else if (snapshot.connectionState == ConnectionState.done) {
-                  Map<String, dynamic> data = snapshot.data.data();
-                  return ListTile(
-                    onTap: () {},
-                    title: Text(
-                      "Name: ${data["name"]}",
-                      style: Theme.of(context).textTheme.headline6,
-                    ),
-                    subtitle: Text(
-                      "Descriptions: ${data["email"]}",
-                      style: Theme.of(context).textTheme.headline5,
-                    ),
-                  );
-                }
-
-                return Center(child: Text("loading..."));
-              },
-            ),
-          );
         });
   }
 
@@ -100,7 +68,7 @@ class _MainScreenState extends State<MainScreen> {
               itemBuilder: (context, index) {
                 return Card(
                   child: FutureBuilder(
-                    future: users.doc('${"${name[index].toString()}"}').get(),
+                    future: users.doc("${name[index].toString()}").get(),
                     builder: (context, snapshot) {
                       if (snapshot.hasError) {
                         return Text("Something went wrong");
@@ -113,7 +81,7 @@ class _MainScreenState extends State<MainScreen> {
                             style: Theme.of(context).textTheme.headline6,
                           ),
                           subtitle: Text(
-                            "Descriptions: ${data["description"]}",
+                            "email: ${data["email"]}",
                             style: Theme.of(context).textTheme.headline5,
                           ),
                         );
@@ -124,7 +92,6 @@ class _MainScreenState extends State<MainScreen> {
                   ),
                 );
               }),
-        )
-        );
+        ));
   }
 }
