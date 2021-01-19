@@ -28,7 +28,7 @@ class _MainScreenState extends State<MainScreen> {
         ),
         appBar: AppBar(
           centerTitle: true,
-          title: Text("User Profile"),
+          title: Text("Contacts"),
           backgroundColor: Theme.of(context).accentColor,
         ),
         body: StreamBuilder<QuerySnapshot>(
