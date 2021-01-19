@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "85536616555",
+    "project_id": "testcontact-swiftdynamics",
+    "storage_bucket": "testcontact-swiftdynamics.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:85536616555:android:98f838b5431613c4ed412e",
+        "android_client_info": {
+          "package_name": "com.example.test_contacts"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "85536616555-9g3mqoljklertd9snhrulpe4mqn8ggai.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC3e907ZA1AmlOq1PCCvfYKUpvT6Dql8TQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "85536616555-9g3mqoljklertd9snhrulpe4mqn8ggai.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
